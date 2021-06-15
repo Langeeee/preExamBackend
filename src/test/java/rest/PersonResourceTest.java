@@ -151,7 +151,8 @@ public class PersonResourceTest {
                 .body("name", equalTo(p1.getName()));
     }
 
-    @Test
+    
+   @Test
     public void testPersonsSize() {
         given()
                 .contentType("application/json")

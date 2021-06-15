@@ -54,7 +54,7 @@ public class PersonResource {
     public String demo() {
         return "{\"msg\":\"Hello World\"}";
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllPersons() {
@@ -80,6 +80,7 @@ public class PersonResource {
             return errorString;
         }
     }
+    
 
     @Path("{id}")
     @GET

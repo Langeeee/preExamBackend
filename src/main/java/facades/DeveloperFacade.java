@@ -7,9 +7,11 @@ package facades;
 
 import dto.DeveloperDTO;
 import dto.HobbyDTO;
+import dto.PersonDTO;
 import dto.ProjectDTO;
 import entities.Developer;
 import entities.Hobby;
+import entities.Person;
 import entities.Project;
 import interfaces.IDeveloperFacade;
 
@@ -52,7 +54,7 @@ public class DeveloperFacade {
         return emf.createEntityManager();
     }
     
-     public List<ProjectDTO> getAllProjects() {
+     public List<ProjectDTO> getAllProjects2() {
     List<ProjectDTO> dtos = new ArrayList<>();
     EntityManager em = emf.createEntityManager();
     try{
@@ -70,6 +72,52 @@ public class DeveloperFacade {
     }
     return dtos;
   }
+
+  public long getNumberOfSchools(){
+    EntityManager em = emf.createEntityManager();
+    try{
+      return (long)em.createQuery("SELECT COUNT(s) FROM School s").getSingleResult();
+    }finally{
+      em.close();
+    }
+  }
+    
+    
+    public List<ProjectDTO> getAllProjects() throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Project> query = em.createQuery("SELECT project FROM Project project", Project.class);
+            List<Project> projects = query.getResultList();
+//            System.out.println(persons.size());
+            ArrayList<ProjectDTO> projectDTOs = new ArrayList<>();
+            for(Project project : projects){
+                projectDTOs.add(new ProjectDTO(project));
+            }
+            return projectDTOs;
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
+    }
+    
+     public List<DeveloperDTO> getAllDevelopers() throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Developer> query = em.createQuery("SELECT developer FROM Developer Ddveloper", Developer.class);
+            List<Developer> developers = query.getResultList();
+//            System.out.println(persons.size());
+            ArrayList<DeveloperDTO> developerDTOs = new ArrayList<>();
+            for(Developer developer : developers){
+                developerDTOs.add(new DeveloperDTO(developer));
+            }
+            return developerDTOs;
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
+    }
      
      public DeveloperDTO getDeveloper(DeveloperDTO dto)  {
     EntityManager em = emf.createEntityManager();
@@ -169,7 +217,7 @@ public class DeveloperFacade {
         }
     }
 
-    
+    /*
     public PersonDTO editPerson(PersonDTO personDTO) throws WebApplicationException {
         if (personDTO.getName() == null) {
             throw new WebApplicationException("Name is missing", 400);
@@ -247,7 +295,7 @@ public class DeveloperFacade {
             em.close();
         }
     }
-    
+    */
      private Project findProjectInDB(ProjectDTO projectDTO) {
         EntityManager em = emf.createEntityManager();
         try {
