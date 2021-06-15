@@ -63,9 +63,9 @@ public class Developer implements Serializable {
      public void removeProject(Project project) {
         if (project != null) {
             this.projects.remove(project);
-            project.getProjects(projects).remove(this);
-           
-    }
+            project.getDevelopers().remove(this); 
+            
+        }
      }
     
     public List<Project> getProjects() {

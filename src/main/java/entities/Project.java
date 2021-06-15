@@ -29,7 +29,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Project.deleteAllRows", query = "DELETE from Project"),
     @NamedQuery(name = "Project.getAllRows", query = "SELECT p from Project p"),
-    @NamedQuery(name = "Project.getPerson", query = "SELECT p from Project p WHERE p = :p")
+    @NamedQuery(name = "Project.getPerson", query = "SELECT p from Project p WHERE p.id = :id")
 })
 public class Project implements Serializable {
 
@@ -49,6 +49,12 @@ public class Project implements Serializable {
     private List<Developer> developers;
 
     public Project() {
+    }
+
+    public Project(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.developers = new ArrayList<>();
     }
 
  

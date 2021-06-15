@@ -59,10 +59,7 @@ public class DeveloperDTO {
     public DeveloperDTO(String name) {
         this.name = name;
     }
-    
-    
-    
-    
+   
       private ArrayList<ProjectDTO> makeDTO2list(List<Project> projects) {
         ArrayList<ProjectDTO> projectsDTOlist = new ArrayList<>();
         for (Project project : projects) {
@@ -71,18 +68,7 @@ public class DeveloperDTO {
         return projectsDTOlist;
     }
 
-      
-      /*
-    public ArrayList<Project> makeProjectlist() {
-        ArrayList<Project> projectList = new ArrayList<>();
-        for (ProjectDTO projectDTO : projects) {
-            projectList.add(new Project(projectDTO.getname()));
-        }
-        return projectList;
-    }
-    */
-      
-      
+ 
     public int getId() {
         return id;
     }

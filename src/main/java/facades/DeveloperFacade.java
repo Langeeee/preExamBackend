@@ -53,7 +53,7 @@ public class DeveloperFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
+ /*
      public List<ProjectDTO> getAllProjects2() {
     List<ProjectDTO> dtos = new ArrayList<>();
     EntityManager em = emf.createEntityManager();
@@ -72,7 +72,7 @@ public class DeveloperFacade {
     }
     return dtos;
   }
-
+*/
   public long getNumberOfSchools(){
     EntityManager em = emf.createEntityManager();
     try{
@@ -81,9 +81,7 @@ public class DeveloperFacade {
       em.close();
     }
   }
-    
-    /*
-    public List<ProjectDTO> getAllProjects() throws WebApplicationException {
+   public ArrayList<ProjectDTO> getAllProjects() throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Project> query = em.createQuery("SELECT project FROM Project project", Project.class);
@@ -100,7 +98,8 @@ public class DeveloperFacade {
             em.close();
         }
     }
-    */
+    
+   
      public List<DeveloperDTO> getAllDevelopers() throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
@@ -198,6 +197,7 @@ public class DeveloperFacade {
     
   
 
+ /*
     
      public List<ProjectDTO> getAllProjects(){
     List<ProjectDTO> dtos = new ArrayList<>();
@@ -217,7 +217,7 @@ public class DeveloperFacade {
     }
     return dtos;
   }
-
+*/
     /*
     public PersonDTO editPerson(PersonDTO personDTO) throws WebApplicationException {
         if (personDTO.getName() == null) {
