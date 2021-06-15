@@ -56,17 +56,7 @@ public class DeveloperResource {
     
     
     
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getAllProjects() {
-        try {
-            List<ProjectDTO> list = FACADE.getAllProjects();
-            return GSON.toJson(list);
-        } catch (WebApplicationException ex) {
-            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
-            return errorString;
-        }
-    }
+    
  
     @Path("/security")
     @RolesAllowed("user")
@@ -85,7 +75,7 @@ public class DeveloperResource {
      @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("projects/all")
-  public String allSchools(){
+  public String allProjects(){
     System.out.println("GET REQUEST: getAllProjects");
     return GSON.toJson(FACADE.getAllProjects());
   }

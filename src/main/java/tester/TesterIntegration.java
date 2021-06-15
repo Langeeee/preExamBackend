@@ -11,6 +11,7 @@ import entities.Hobby;
 import entities.Job;
 import entities.NickName;
 import entities.Person;
+import entities.Project;
 import facades.PersonFacade;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -27,6 +28,7 @@ public class TesterIntegration {
         PersonFacade pf = PersonFacade.getFacade(emf);
         
         //Add
+      
         Person person = new Person("Sam");
         Job job = new Job("Developer");
         NickName nickName = new NickName("The Coder");

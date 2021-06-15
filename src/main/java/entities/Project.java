@@ -7,6 +7,7 @@ package entities;
 
 import entities.Developer;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -41,6 +42,8 @@ public class Project implements Serializable {
     private String name;
     @Column(name = "description", length = 175, nullable = false, unique = false)
     private String description;
+    
+    
 
     @ManyToMany
     private List<Developer> developers;
@@ -48,11 +51,15 @@ public class Project implements Serializable {
     public Project() {
     }
 
-    public Project(String name, String description, List<Developer> developers) {
+ 
+
+    public Project(int id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.developers = developers;
+        this.developers = new ArrayList<>();
     }
+    
 
     public int getId() {
         return id;

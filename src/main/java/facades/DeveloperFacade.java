@@ -199,23 +199,24 @@ public class DeveloperFacade {
   
 
     
-    public List<ProjectDTO> getAllProjects() throws WebApplicationException {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Project> query = em.createQuery("SELECT project FROM Project project", Project.class);
-            List<Project> projects = query.getResultList();
-//            System.out.println(developers.size());
-            ArrayList<ProjectDTO> projectDTOs = new ArrayList<>();
-            for(Project project : projects){
-                projectDTOs.add(new ProjectDTO(project));
-            }
-            return projectDTOs;
-        } catch (RuntimeException ex) {
-            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
-        } finally {
-            em.close();
-        }
+     public List<ProjectDTO> getAllProjects(){
+    List<ProjectDTO> dtos = new ArrayList<>();
+    EntityManager em = emf.createEntityManager();
+    try{
+      TypedQuery<Project> project = em.createQuery("SELECT p FROM Project p", Project.class);
+      List<Project> res = project.getResultList();
+
+      for(Project p: res){
+        dtos.add(new ProjectDTO(p));
+      }
+
+    }catch (NoResultException ex) {
+      return new ArrayList<>();
+    } finally {
+      em.close();
     }
+    return dtos;
+  }
 
     /*
     public PersonDTO editPerson(PersonDTO personDTO) throws WebApplicationException {
