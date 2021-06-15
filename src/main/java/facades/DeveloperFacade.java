@@ -6,8 +6,10 @@
 package facades;
 
 import dto.DeveloperDTO;
+import dto.HobbyDTO;
 import dto.ProjectDTO;
 import entities.Developer;
+import entities.Hobby;
 import entities.Project;
 import interfaces.IDeveloperFacade;
 
@@ -23,7 +25,7 @@ import javax.ws.rs.WebApplicationException;
 /**
  *
  * @author Jacob
- 
+ */
 public class DeveloperFacade {
     
       private static DeveloperFacade instance;
@@ -37,7 +39,7 @@ public class DeveloperFacade {
      *
      * @param _emf
      * @return an instance of this facade class.
-     
+     */
     public static DeveloperFacade getFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -49,6 +51,43 @@ public class DeveloperFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+     public List<ProjectDTO> getAllProjects() {
+    List<ProjectDTO> dtos = new ArrayList<>();
+    EntityManager em = emf.createEntityManager();
+    try{
+      TypedQuery<Project> query = em.createQuery("SELECT p FROM Project p", Project.class);
+      List<Project> res = query.getResultList();
+
+      for(Project p: res){
+        dtos.add(new ProjectDTO(p));
+      }
+
+    }catch (NoResultException ex) {
+      return new ArrayList<>();
+    }finally {
+      em.close();
+    }
+    return dtos;
+  }
+     
+     public DeveloperDTO getDeveloper(DeveloperDTO dto)  {
+    EntityManager em = emf.createEntityManager();
+    Developer developer = new Developer();
+    try {
+      Query query = em.createQuery("SELECT d FROM Developer d WHERE d.id = :id", Developer.class);
+      query.setParameter("email", developer.getEmail());
+      developer = (Developer) query.getSingleResult();
+
+    } catch (RuntimeException ex) {
+     
+    } finally {
+      em.close();
+    }
+    return new DeveloperDTO(developer);
+  }
+     
+     
 
     
    
@@ -63,17 +102,13 @@ public class DeveloperFacade {
         try {
             em.getTransaction().begin();
             
-            Developer developer = new Developer(developerDTO.getName());
-            
-            
-
-            
+            Developer developer = new Developer();
 
             //Create or use existing Project
             if (developerDTO.getProjects() != null) {
                 Project project;
                 for (ProjectDTO projectDTO : developerDTO.getProjects()) {
-                    project = findHobbyInDB(projectDTO);
+                    project = findProjectInDB(projectDTO);
                     if (project.getId() > 0) {
                         project = em.find(Project.class, project.getId());
                     }
@@ -82,26 +117,27 @@ public class DeveloperFacade {
                 }
 
             }
+            
             em.persist(developer);
-
             em.getTransaction().commit();
-            return new PersonDTO(person);
+            return new DeveloperDTO(developer);
+            
         } catch (RuntimeException ex) {
             throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
         } finally {
             em.close();
         }
     }
-
     
-    public PersonDTO deletePerson(int id) throws WebApplicationException {
+    
+    public ProjectDTO deleteProject(int id) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Person person = em.find(Person.class, id);
-            em.remove(person);
+            Project project = em.find(Project.class, id);
+            em.remove(project);
             em.getTransaction().commit();
-            return new PersonDTO(person);
+            return new ProjectDTO(project);
         } catch (NullPointerException | IllegalArgumentException ex) {
             throw new WebApplicationException("Could not delete, provided id: " + id + " does not exist", 404);
         } catch (RuntimeException ex) {
@@ -112,19 +148,7 @@ public class DeveloperFacade {
     }
 
     
-    public PersonDTO getPerson(int id) throws WebApplicationException {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Person person = em.find(Person.class, id);
-            return new PersonDTO(person);
-        } catch (NullPointerException ex) {
-            throw new WebApplicationException("No Person with provided id: " + id, 404);
-        } catch (RuntimeException ex) {
-            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
-        } finally {
-            em.close();
-        }
-    }
+  
 
     
     public List<DeveloperDTO> getAllDevelopers() throws WebApplicationException {
@@ -223,55 +247,18 @@ public class DeveloperFacade {
             em.close();
         }
     }
-
-    private Job findJobInDB(JobDTO jobDTO) {
+    
+     private Project findProjectInDB(ProjectDTO projectDTO) {
         EntityManager em = emf.createEntityManager();
         try {
-            Query query = em.createQuery("SELECT j FROM Job j WHERE j.title = :title ", Job.class);
-            query.setParameter("title", jobDTO.getTitle());
-            Job job = (Job) query.getSingleResult();
-            return job;
-        } catch (NoResultException ex) {
-            Job job = new Job(jobDTO.getTitle());
-            return job;
-        } finally {
-            em.close();
-        }
-    }
-
-    private NickName findNickNameInDB(NickNameDTO nickNameDTO) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Query query = em.createQuery("SELECT n FROM NickName n WHERE n.name = :name ", NickName.class);
-            query.setParameter("name", nickNameDTO.getNickName());
-            NickName nickName = (NickName) query.getSingleResult();
-            return nickName;
-        } catch (NoResultException ex) {
-            //System.out.println("Her");
-            NickName nickName = new NickName(nickNameDTO.getNickName());
-//            System.out.println(nickName);
-            return nickName;
-        } finally {
-            em.close();
-        }
-    }
-
-    private Hobby findHobbyInDB(HobbyDTO hobbyDTO) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Query query = em.createQuery("SELECT h FROM Hobby h WHERE h.name = :name ", Hobby.class);
-            query.setParameter("name", hobbyDTO.getName());
-            Hobby hobby = (Hobby) query.getSingleResult();
-            return hobby;
-        } catch (NoResultException ex) {
-            //System.out.println("Her");
-            Hobby hobby = new Hobby(hobbyDTO.getName());
-            return hobby;
-        } finally {
+            Query query = em.createQuery("SELECT p FROM Project p WHERE p.name = :name ", Project.class);
+            query.setParameter("name", projectDTO.getName());
+            Project project = (Project) query.getSingleResult();
+            return project;
+        }  finally {
             em.close();
         }
     }
 
     
 }
-*/
