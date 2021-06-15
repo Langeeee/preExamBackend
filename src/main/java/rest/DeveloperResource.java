@@ -51,7 +51,7 @@ public class DeveloperResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
-        return "{\"msg\":\"Hello -  World\"}";
+        return "{\"msg\":\"Hello World\"}";
     }
     
     
@@ -112,6 +112,8 @@ public class DeveloperResource {
             return errorString;
         }
     }
+    
+    
     
     /*
     @Path("{id}")

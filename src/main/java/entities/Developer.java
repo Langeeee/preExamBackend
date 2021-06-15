@@ -5,6 +5,7 @@
  */
 package entities;
 
+
 import entities.Project;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -128,13 +129,14 @@ public class Developer implements Serializable {
         this.billingPrHour = billingPrHour;
     }
 
-   
-
     @Override
     public String toString() {
         return "Developer{" + "id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", billingPrHour=" + billingPrHour + ", projects=" + projects + '}';
     }
 
+   
+
+   
    
     
     
