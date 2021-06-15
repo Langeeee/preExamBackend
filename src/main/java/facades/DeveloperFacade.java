@@ -104,7 +104,7 @@ public class DeveloperFacade {
      public List<DeveloperDTO> getAllDevelopers() throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Developer> query = em.createQuery("SELECT developer FROM Developer Ddveloper", Developer.class);
+            TypedQuery<Developer> query = em.createQuery("SELECT developer FROM Developer Developer", Developer.class);
             List<Developer> developers = query.getResultList();
 //            System.out.println(persons.size());
             ArrayList<DeveloperDTO> developerDTOs = new ArrayList<>();
