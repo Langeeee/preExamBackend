@@ -55,6 +55,10 @@ public class DeveloperDTO {
         this.billingPrHour = billingPrHour;
         this.projects = projects;
     }
+
+    public DeveloperDTO(String name) {
+        this.name = name;
+    }
     
     
     
