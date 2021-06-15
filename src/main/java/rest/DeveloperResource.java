@@ -86,7 +86,7 @@ public class DeveloperResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("projects/all")
   public String allSchools(){
-    System.out.println("GET REQUEST: allProjects");
+    System.out.println("GET REQUEST: getAllProjects");
     return GSON.toJson(FACADE.getAllProjects());
   }
   
