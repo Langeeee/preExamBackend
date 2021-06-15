@@ -73,14 +73,7 @@ public class DeveloperFacade {
     return dtos;
   }
 */
-  public long getNumberOfSchools(){
-    EntityManager em = emf.createEntityManager();
-    try{
-      return (long)em.createQuery("SELECT COUNT(s) FROM School s").getSingleResult();
-    }finally{
-      em.close();
-    }
-  }
+  
    public ArrayList<ProjectDTO> getAllProjects() throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
@@ -134,10 +127,6 @@ public class DeveloperFacade {
     return new DeveloperDTO(developer);
   }
      
-     
-
-    
-   
     public synchronized DeveloperDTO addDeveloper(DeveloperDTO developerDTO) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         if (developerDTO.getName() == null) {
@@ -177,6 +166,24 @@ public class DeveloperFacade {
     }
     
     
+    
+     public DeveloperDTO deleteDeveloper(int id) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Developer developer = em.find(Developer.class, id);
+            em.remove(developer);
+            em.getTransaction().commit();
+            return new DeveloperDTO(developer);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new WebApplicationException("Could not delete, provided id: " + id + " does not exist", 404);
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
+    }
+    
     public ProjectDTO deleteProject(int id) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
@@ -187,6 +194,21 @@ public class DeveloperFacade {
             return new ProjectDTO(project);
         } catch (NullPointerException | IllegalArgumentException ex) {
             throw new WebApplicationException("Could not delete, provided id: " + id + " does not exist", 404);
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
+    }
+    
+    
+    public ProjectDTO getProject(int id) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Project project = em.find(Project.class, id);
+            return new ProjectDTO(project);
+        } catch (NullPointerException ex) {
+            throw new WebApplicationException("No Project with provided id: " + id, 404);
         } catch (RuntimeException ex) {
             throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
         } finally {
@@ -218,15 +240,29 @@ public class DeveloperFacade {
     return dtos;
   }
 */
-    /*
-    public PersonDTO editPerson(PersonDTO personDTO) throws WebApplicationException {
-        if (personDTO.getName() == null) {
+ 
+     private Project findProjectInDB(ProjectDTO projectDTO) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query query = em.createQuery("SELECT p FROM Project p WHERE p.name = :name ", Project.class);
+            query.setParameter("name", projectDTO.getName());
+            Project project = (Project) query.getSingleResult();
+            return project;
+        }  finally {
+            em.close();
+        }
+    }
+     
+     /*
+     
+     public DeveloperDTO editDeveloper(DeveloperDTO developerDTO) throws WebApplicationException {
+        if (developerDTO.getName() == null) {
             throw new WebApplicationException("Name is missing", 400);
-        } else if (personDTO.getJob() == null || personDTO.getJob().getTitle() == null) {
+        } else if (developerDTO.getName() == null || developerDTO.getName() == null) {
             throw new WebApplicationException("Job title is missing.", 400);
-        } else if (personDTO.getNickName() == null || personDTO.getNickName().getNickName() == null) {
+        } else if (developerDTO.getEmail() == null || developerDTO.getEmail() == null) {
             throw new WebApplicationException("Nickname is missing.", 400);
-        } else if (personDTO.getHobbies().isEmpty() || personDTO.getHobbies() == null) {
+        } else if (developerDTO.getProjects() || developerDTO.getProjects() == null) {
             throw new WebApplicationException("Hobbies are missing.", 400);
         }
         EntityManager em = emf.createEntityManager();
@@ -296,18 +332,6 @@ public class DeveloperFacade {
             em.close();
         }
     }
-    */
-     private Project findProjectInDB(ProjectDTO projectDTO) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Query query = em.createQuery("SELECT p FROM Project p WHERE p.name = :name ", Project.class);
-            query.setParameter("name", projectDTO.getName());
-            Project project = (Project) query.getSingleResult();
-            return project;
-        }  finally {
-            em.close();
-        }
-    }
-
+*/
     
 }

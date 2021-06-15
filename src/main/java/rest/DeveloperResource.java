@@ -55,8 +55,18 @@ public class DeveloperResource {
     }
     
     
-    
-    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllProjects() {
+        try {
+            List<ProjectDTO> list = FACADE.getAllProjects();
+            return GSON.toJson(list);
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
+    }
+   
  
     @Path("/security")
     @RolesAllowed("user")
@@ -71,6 +81,7 @@ public class DeveloperResource {
             return errorString;
         }
     }
+    
     
      @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -88,14 +99,48 @@ public class DeveloperResource {
     return GSON.toJson(FACADE.getAllDevelopers());
   }
      
-/*
+
    @Path("{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getProjectById(@PathParam("id") int id) {
         try {
-            DeveloperDTO developerDTO = FACADE.g
+            ProjectDTO projectDTO = FACADE.getProject(id);
             return GSON.toJson(projectDTO);
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
+    }
+    
+    /*
+    @Path("{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String editDeveloper(@PathParam("id") int id, String developer) {
+        try {
+            //System.out.println(person);
+            DeveloperDTO developerDTOEditInfo = GSON.fromJson(developer, DeveloperDTO.class); //manual conversion
+            developerDTOEditInfo.setId(id);
+            developerDTOEditInfo = FACADE.editDeveloper(DeveloperDTOEditInfo);
+            return GSON.toJson(DeveloperDTOEditInfo);
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
+    }
+    */
+    
+    
+     @Path("{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteDeveloper(@PathParam("id") int id) {
+        try {
+            DeveloperDTO developerDTO = FACADE.deleteDeveloper(id);
+            System.out.println(developerDTO);
+            return "{\"status\": \"removed\"}";
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             return errorString;
@@ -105,5 +150,4 @@ public class DeveloperResource {
   
 
     }
-*/
-}
+
